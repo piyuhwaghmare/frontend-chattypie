@@ -10,12 +10,10 @@ function App() {
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef(null);
 
-  // 1. Load Chat History when page opens
   useEffect(() => {
     fetchHistory();
   }, []);
 
-  // 2. Auto-scroll to bottom when a new message arrives
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -32,17 +30,15 @@ function App() {
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    // Optimistic Update: Show user message immediately
     const userMessage = { role: 'user', content: input };
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setLoading(true);
 
     try {
-      // Send to Backend
+     
       const res = await axios.post('https://ai-chat-app-r7tg.onrender.com/api/chat', { message: input });
       
-      // Add AI Response
       const aiMessage = { role: 'assistant', content: res.data.reply };
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
